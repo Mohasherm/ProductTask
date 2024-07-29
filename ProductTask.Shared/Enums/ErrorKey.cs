@@ -15,5 +15,6 @@
         TheRoleIsExist,
         ThisRoleCannotBeDeleted,
         ThereAreActiveUsersWithThisRoles,
+        CategoryNotFound,
     }
 }
