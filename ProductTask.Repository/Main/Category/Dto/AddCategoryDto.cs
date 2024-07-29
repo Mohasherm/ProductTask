@@ -1,4 +1,4 @@
-﻿namespace ProductTask.Repository.Main.Dto
+﻿namespace ProductTask.Repository.Main.Category.Dto
 {
     public class AddCategoryDto
     {

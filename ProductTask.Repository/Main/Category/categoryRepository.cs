@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ProductTask.Base.OperationResult;
 using ProductTask.Entity.Main;
 using ProductTask.Repository.Base;
-using ProductTask.Repository.Main.Dto;
+using ProductTask.Repository.Main.Category.Dto;
 using ProductTask.Shared.Enums;
 using ProductTask.SqlServer.Data;
 using System;
@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProductTask.Repository.Main
+namespace ProductTask.Repository.Main.Category
 {
     public class categoryRepository : BaseRepository, IcategoryRepository
     {
@@ -24,7 +24,7 @@ namespace ProductTask.Repository.Main
             var res = new OperationResult<bool>();
 
             if (string.IsNullOrEmpty(dto.Name))
-                res.ThrowException(ErrorKey.SomeFieldesIsRequired,ResultStatus.ValidationError);
+                res.ThrowException(ErrorKey.SomeFieldesIsRequired, ResultStatus.ValidationError);
 
             var data = new CategoryModel
             {
@@ -80,6 +80,9 @@ namespace ProductTask.Repository.Main
             if (Id == Guid.Empty)
                 res.ThrowException(ErrorKey.SomeFieldesIsRequired, ResultStatus.ValidationError);
 
+            if (!_context.Categories.Any(x => x.Id == Id))
+                res.ThrowException(ErrorKey.CategoryNotFound, ResultStatus.ValidationError);
+
             res.Data = await _context.Categories
                .AsNoTracking()
                .Select(x => new GetCategoryDto
@@ -103,7 +106,7 @@ namespace ProductTask.Repository.Main
             if (data == null)
                 res.ThrowException(ErrorKey.CategoryNotFound, ResultStatus.ValidationError);
 
-            data.Name =dto.Name;
+            data.Name = dto.Name;
 
             _context.SaveChanges();
 

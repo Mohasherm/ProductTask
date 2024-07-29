@@ -1,10 +1,10 @@
 ﻿using ProductTask.Base.OperationResult;
-using ProductTask.Repository.Main.Dto;
+using ProductTask.Repository.Main.Category.Dto;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ProductTask.Repository.Main
+namespace ProductTask.Repository.Main.Category
 {
     public interface IcategoryRepository
     {

@@ -153,13 +153,11 @@ namespace ProductTask.Repository.Account
         public async Task<OperationResult<bool>> Update(UpdateRequest request)
         {
             var res = new OperationResult<bool>();
-            if (request.Id == Guid.Empty)
-                res.ThrowException(ErrorKey.SomeFieldesIsRequired, ResultStatus.ValidationError);
 
-            var user = await _get<UserModel>(x => x.Id == request.Id);
+            if (await IsExist<UserModel>(s => s.UserName == request.UserName && s.Id != GetUserId()))
+                res.ThrowException(ErrorKey.UserNameHasBeenTaken, ResultStatus.ValidationError);
 
-            if (user is null)
-                res.ThrowException(ErrorKey.UserNotFound, ResultStatus.ValidationError);
+            var user = await _get<UserModel>(x => x.Id == GetUserId());
 
             user.UserName = request.UserName;
             user.PhoneNumber = request.PhoneNumber;

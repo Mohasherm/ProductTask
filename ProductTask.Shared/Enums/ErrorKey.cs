@@ -16,5 +16,7 @@
         ThisRoleCannotBeDeleted,
         ThereAreActiveUsersWithThisRoles,
         CategoryNotFound,
+        ThereIsSomeCategoriesNotFound,
+        ProductNotFound,
     }
 }

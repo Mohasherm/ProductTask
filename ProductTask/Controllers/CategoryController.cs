@@ -1,8 +1,8 @@
 ﻿using ButterflyApi.Base.ErrorHandling;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProductTask.Repository.Main;
-using ProductTask.Repository.Main.Dto;
+using ProductTask.Repository.Main.Category;
+using ProductTask.Repository.Main.Category.Dto;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
