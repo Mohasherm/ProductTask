@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ProductTask.Base.OperationResult;
-using ProductTask.Entity.Permission;
 using ProductTask.Entity.Security;
 using ProductTask.Repository.Account.Dto;
 using ProductTask.Repository.Base;
@@ -25,70 +24,7 @@ namespace ProductTask.Repository.Account
             this.tokenRepository = tokenRepository;
         }
 
-        public async Task<OperationResult<bool>> AddRole(string Name)
-        {
-            var result = new OperationResult<bool>();
-            #region Validation
-            if (string.IsNullOrEmpty(Name))
-            {
-                result.AddError(ErrorKey.SomeFieldesIsRequired, ResultStatus.ValidationError);
-                return result;
-            }
-            if (await IsExist<RoleModel>(s => s.Name == Name))
-            {
-                result.AddError(ErrorKey.TheRoleIsExist, ResultStatus.ValidationError);
-                return result;
-            }
-            #endregion
-            var webContents = await _context.WebContents.ToListAsync();
-            var role = new RoleModel
-            {
-                Id = Guid.NewGuid(),
-                Name = Name,
-                WebContentRoles = new List<WebContentRoleModel>()
-            };
-            foreach (var item in webContents)
-                role.WebContentRoles.Add(new WebContentRoleModel
-                {
-                    WebContentId = item.Id,
-                    CanAdd = false,
-                    CanDelete = false,
-                    CanEdit = false,
-                    CanView = false,
-                });
-            _context.Add(role);
-            await _context.SaveChangesAsync();
-            result.Data = true;
-            return result;
-        }
-
-        public async Task<OperationResult<bool>> DeleteRole(Guid id)
-        {
-            var result = new OperationResult<bool>();
-            var role = await _context.Roles.FirstOrDefaultAsync(s => s.Id == id);
-            #region Validation
-            if (role == null)
-            {
-                result.AddError(ErrorKey.RoleNotFound, ResultStatus.NotFound);
-                return result;
-            }
-            if (role.Name == Role.Admin.ToString())
-            {
-                result.AddError(ErrorKey.ThisRoleCannotBeDeleted, ResultStatus.ValidationError);
-                return result;
-            }
-            if (await IsExist<RoleModel>(s => s.Users.Any() && s.Id == id))
-            {
-                result.AddError(ErrorKey.ThereAreActiveUsersWithThisRoles, ResultStatus.ValidationError);
-                return result;
-            }
-            #endregion
-            role.IsValid = false;
-            _context.Update(role);
-            await _context.SaveChangesAsync();
-            result.Data = true;
-            return result;
-        }
+     
 
         public async Task<OperationResult<bool>> DeleteUser(Guid Id)
         {
@@ -126,7 +62,7 @@ namespace ProductTask.Repository.Account
             return res;
         }
 
-        public async Task<OperationResult<List<GetRolesDto>>> GetRolesCp()
+        public async Task<OperationResult<List<GetRolesDto>>> GetRoles()
         {
             var result = new OperationResult<List<GetRolesDto>>();
 
@@ -201,7 +137,7 @@ namespace ProductTask.Repository.Account
 
             var cpuser = new UserModel
             {
-                RoleId = request.RoleId,
+                RoleId = _context.Roles.FirstOrDefault(x => x.Name == nameof(Role.User)).Id,
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber,
                 Email = request.Email,
@@ -228,7 +164,6 @@ namespace ProductTask.Repository.Account
             user.UserName = request.UserName;
             user.PhoneNumber = request.PhoneNumber;
             user.Email = request.Email;
-            user.RoleId = request.RoleId;
 
             if (!string.IsNullOrEmpty(request.Password))
             {

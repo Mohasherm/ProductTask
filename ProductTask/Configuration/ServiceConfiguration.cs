@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProductTask.Repository.Account;
-using ProductTask.Repository.Permission;
 using ProductTask.Repository.Security.Token;
 using ProductTask.SqlServer.Data;
 using ProductTask.Utill;
@@ -29,7 +28,6 @@ namespace ProductTask.Configuration
 			services.AddHttpContextAccessor();
 			services.AddHttpClient();
 			services.AddScoped<ITokenRepository, TokenRepository>();
-			services.AddScoped<IContentRepository, ContentRepository>();
 			services.AddScoped<IAccountRepository, AccountRepository>();
 
 

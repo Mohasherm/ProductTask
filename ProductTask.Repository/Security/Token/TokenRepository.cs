@@ -18,6 +18,13 @@ namespace ProductTask.Repository.Security.Token
     {
         private readonly DataContext context;
         private readonly IConfiguration configuration;
+
+        public TokenRepository(DataContext context, IConfiguration configuration)
+        {
+            this.context = context;
+            this.configuration = configuration;
+        }
+
         public async Task<TokenDto> GenerateJwtToken(Guid userId)
         {
             var user = await context.Users.FirstOrDefaultAsync(s => s.IsValid && s.Id == userId);

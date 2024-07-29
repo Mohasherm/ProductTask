@@ -1,13 +1,9 @@
 ﻿using ButterflyApi.Base.ErrorHandling;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductTask.Repository.Account;
 using ProductTask.Repository.Account.Dto;
-using ProductTask.Repository.Permission.Dto;
 using ProductTask.Repository.Security.Token.Dto;
-using ProductTask.Shared.Enums;
-using ProductTask.Utill;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProductTask.Controllers
@@ -26,7 +22,6 @@ namespace ProductTask.Controllers
 
         [HttpPost]
         [Produces(typeof(TokenDto))]
-        //[DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Set))]
         public async Task<IActionResult> Login(LoginRequest request)
         {
             var result = await accountRepository.Login(request);
@@ -35,7 +30,6 @@ namespace ProductTask.Controllers
 
         [HttpPost]
         [Produces(typeof(bool))]
-        [DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Set))]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
             var result = await accountRepository.Register(request);
@@ -44,67 +38,14 @@ namespace ProductTask.Controllers
 
         [HttpPut]
         [Produces(typeof(bool))]
-        [DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Set))]
+        [Authorize]
         public async Task<IActionResult> Update(UpdateRequest request)
         {
             var result = await accountRepository.Update(request);
             return result.GetResult();
         }
 
-        [HttpGet]
-        [Produces(typeof(List<GetAllUsersResponse>))]
-        [DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Get))]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var result = await accountRepository.GetAllUsers();
-            return result.GetResult();
-        }
-
-        [HttpGet]
-        [Produces(typeof(GetAllUsersResponse))]
-        [DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Get))]
-        public async Task<IActionResult> GetUserById([FromQuery] Guid Id)
-        {
-            var result = await accountRepository.GetUserById(Id);
-            return result.GetResult();
-        }
-
-        [HttpDelete]
-        [Produces(typeof(bool))]
-        [DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Delete))]
-        public async Task<IActionResult> DeleteUser(Guid Id)
-        {
-            var result = await accountRepository.DeleteUser(Id);
-            return result.GetResult();
-        }
-
-        [HttpGet]
-        [Produces(typeof(List<GetRolesDto>))]
-        [DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Get))]
-        public async Task<IActionResult> GetRolesCp()
-        {
-            var result = await accountRepository.GetRolesCp();
-            return result.GetResult();
-        }
-
-
-        [HttpPost]
-        [Produces(typeof(bool))]
-        [DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Set))]
-        public async Task<IActionResult> AddRole(string Name)
-        {
-            var result = await accountRepository.AddRole(Name);
-            return result.GetResult();
-        }
-
-        [HttpDelete]
-        [Produces(typeof(bool))]
-        [DynamicAuthorize(nameof(ControllerNames.Account), nameof(RequestType.Delete))]
-        public async Task<IActionResult> DeleteRole(Guid Id)
-        {
-            var result = await accountRepository.DeleteRole(Id);
-            return result.GetResult();
-        }
+     
 
     }
 }

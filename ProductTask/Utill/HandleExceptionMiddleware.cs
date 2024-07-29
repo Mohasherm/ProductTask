@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using ProductTask.Base.ErrorHandling;
 using ProductTask.Shared.Enums;
-using ProductTask.Shared.Resource;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;

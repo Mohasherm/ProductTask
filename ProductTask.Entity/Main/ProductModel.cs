@@ -10,7 +10,7 @@ namespace ProductTask.Entity.Main
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal Price{ get; set; }
+        public float Price{ get; set; }
         public ICollection<ProductCategoryModel> ProductCategories{ get; set; }
     }
 }

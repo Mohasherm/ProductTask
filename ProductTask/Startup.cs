@@ -43,6 +43,12 @@ namespace ProductTask
 
             services.AddSwaggerConfiguration();
 
+            //seed
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+
+                Seeder.SeedData(serviceProvider).GetAwaiter();
+            }
 
         }
 
@@ -56,13 +62,6 @@ namespace ProductTask
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductTask v1"));
             }
 
-            //seed
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                var services = serviceScope.ServiceProvider;
-
-                Seeder.SeedData(services).GetAwaiter();
-            }
 
             app.UseCors(cors => cors
               .AllowAnyMethod()

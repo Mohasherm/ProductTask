@@ -10,7 +10,7 @@ using ProductTask.SqlServer.Data;
 namespace ProductTask.SqlServer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240728170558_init")]
+    [Migration("20240729133557_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,8 +107,8 @@ namespace ProductTask.SqlServer.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -162,10 +162,16 @@ namespace ProductTask.SqlServer.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsValid")
                         .HasColumnType("bit");
 
                     b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RoleId")

@@ -16,8 +16,5 @@ namespace ProductTask.Repository.Account
         Task<OperationResult<GetAllUsersResponse>> GetUserById(Guid Id);
         Task<OperationResult<bool>> DeleteUser(Guid Id);
 
-        Task<OperationResult<List<GetRolesDto>>> GetRolesCp();
-        Task<OperationResult<bool>> AddRole(string Name);
-        Task<OperationResult<bool>> DeleteRole(Guid id);
     }
 }
