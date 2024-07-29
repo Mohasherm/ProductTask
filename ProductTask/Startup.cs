@@ -35,18 +35,16 @@ namespace ProductTask
            
 
             var ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-
             services.AddDbContextService<DataContext>(ConnectionString)
                             .AddRepositoriesService()
                             .AddMiddlewaresService()
-                            .AddJwtConfiguration(Configuration["JWT:Key"]);
+                            .AddJwtConfiguration(Configuration.GetSection("JWT:Key").Value);
 
             services.AddSwaggerConfiguration();
 
             //seed
             using (var serviceProvider = services.BuildServiceProvider())
             {
-
                 Seeder.SeedData(serviceProvider).GetAwaiter();
             }
 
@@ -75,6 +73,7 @@ namespace ProductTask
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

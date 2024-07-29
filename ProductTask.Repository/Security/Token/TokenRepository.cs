@@ -40,9 +40,8 @@ namespace ProductTask.Repository.Security.Token
         };
 
             var token = new JwtSecurityToken(
-
-                issuer: "https://localhost:5160/",
-                audience: "https://localhost:7164/",
+                issuer: "https://localhost:5000/",
+                audience: "https://localhost:5001/",
                 claims,
                 expires: DateTime.UtcNow.AddYears(1),
                 signingCredentials: credentials);

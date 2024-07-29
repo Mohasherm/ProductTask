@@ -54,15 +54,6 @@ namespace ProductTask.Configuration
 			{
 				options.SaveToken = true;
 				options.RequireHttpsMetadata = false;
-				options.Events = new JwtBearerEvents
-				{
-					OnChallenge = context =>
-					{
-						context.HandleResponse();
-						context.Response.StatusCode = 401;
-						return Task.CompletedTask;
-					}
-				};
 				options.TokenValidationParameters = new TokenValidationParameters
 				{
 					ValidateIssuer = false,
