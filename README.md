@@ -12,3 +12,7 @@ the database will automatically created and make admin user with password = Aaa@
 you can use account section in swagger to add user and loging user
 All HttpGet verbs is not authorized and other verbs you need to login and get token to authorize
 
+# ProductTaskFrontEnd
+this project done by using .net8 sdk and blazor webassembly framework
+to start this project you need to run backend project first then run frontend project
+
