@@ -8,6 +8,6 @@ public interface IProductService
     Task<GetResult<bool>> UpdateProduct(UpdateProduct dto);
     Task<GetResult<bool>> DeleteProduct(Guid Id);
     Task<GetResult<List<GetProductsDto>>> GetAllProducts();
-    Task<GetResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid Id);
+    Task<GetResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid? Id);
     Task<GetResult<UpdateProduct>> GetProductById(Guid Id);
 }

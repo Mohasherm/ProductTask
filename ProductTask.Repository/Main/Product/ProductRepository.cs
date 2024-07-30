@@ -121,7 +121,7 @@ namespace ProductTask.Repository.Main.Product
                 .Select(x => new GetProductsDto
                 {
                     Id = x.Id,
-                    Name = x.Name,  
+                    Name = x.Name,
                     Description = x.Description,
                     Price = x.Price
                 }).ToListAsync();
@@ -129,28 +129,44 @@ namespace ProductTask.Repository.Main.Product
             return res;
         }
 
-        public async Task<OperationResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid Id)
+        public async Task<OperationResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid? Id)
         {
             var res = new OperationResult<List<GetProductsDto>>();
 
-            if (Id == Guid.Empty)
-                res.ThrowException(ErrorKey.SomeFieldesIsRequired, ResultStatus.ValidationError);
+            if (Id != null && Id != Guid.Empty)
+            {
+                var data = await _get<CategoryModel>(x => x.Id == Id);
 
-            var data = await _get<CategoryModel>(x => x.Id == Id);
+                if (data == null)
+                    res.ThrowException(ErrorKey.CategoryNotFound, ResultStatus.ValidationError);
+            }
 
-            if (data == null)
-                res.ThrowException(ErrorKey.CategoryNotFound, ResultStatus.ValidationError);
+            if (Id == null)
+            {
+                res.Data = await _context.Products
+               .AsNoTracking()
+               .Select(x => new GetProductsDto
+               {
+                   Id = x.Id,
+                   Name = x.Name,
+                   Description = x.Description,
+                   Price = x.Price
+               }).ToListAsync();
+            }
+            else
+            {
+                res.Data = await _context.ProductCategories
+                    .AsNoTracking()
+                    .Where(x => x.CategoryId == Id)
+                    .Select(x => new GetProductsDto
+                    {
+                        Id = x.ProductId,
+                        Name = x.Product.Name,
+                        Description = x.Product.Description,
+                        Price = x.Product.Price
+                    }).ToListAsync();
+            }
 
-            res.Data = await _context.ProductCategories
-                .AsNoTracking()
-                .Where(x => x.CategoryId == Id)
-                .Select(x => new GetProductsDto
-                {
-                    Id = x.ProductId,
-                    Name = x.Product.Name,
-                    Description = x.Product.Description,
-                    Price = x.Product.Price
-                }).ToListAsync();
 
             return res;
         }

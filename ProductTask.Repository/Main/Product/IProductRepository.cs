@@ -12,7 +12,7 @@ namespace ProductTask.Repository.Main.Product
         Task<OperationResult<bool>> UpdateProduct(UpdateProduct dto);
         Task<OperationResult<bool>> DeleteProduct(Guid Id);
         Task<OperationResult<List<GetProductsDto>>> GetAllProducts();
-        Task<OperationResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid Id);
+        Task<OperationResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid? Id);
         Task<OperationResult<UpdateProduct>> GetProductById(Guid Id);
     }
 }

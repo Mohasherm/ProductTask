@@ -73,7 +73,7 @@ public class ProductService : BaseRepo, IProductService
         return result;
     }
 
-    public async Task<GetResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid Id)
+    public async Task<GetResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid? Id)
     {
         var result = new GetResult<List<GetProductsDto>>();
 

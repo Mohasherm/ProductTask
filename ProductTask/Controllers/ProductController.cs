@@ -57,7 +57,7 @@ namespace ProductTask.Controllers
 
         [HttpGet]
         [Produces(typeof(List<GetProductsDto>))]
-        public async Task<IActionResult> GetAllProductsByCategoryId(Guid Id)
+        public async Task<IActionResult> GetAllProductsByCategoryId(Guid? Id)
         {
             var res = await productRepository.GetAllProductsByCategoryId(Id);
             return res.GetResult();

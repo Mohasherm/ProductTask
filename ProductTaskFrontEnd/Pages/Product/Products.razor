@@ -31,7 +31,7 @@
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeMD="8">
                         <RadzenDropDown @bind-Value="CategoryId" Data=@Categorieslst TextProperty="Name" ValueProperty="Id" Name="Categories" Change="GetProductsById"
-                                         Placeholder="Choose categories" Chips=true Style="display: block" class="w-100" />
+                                        AllowClear="true" Placeholder="Choose categories" Chips=true Style="display: block" class="w-100" />
                     </RadzenColumn>
                 </RadzenRow>
             }
@@ -115,21 +115,19 @@
 
     public async Task GetProductsById()
     {
-        if (CategoryId != null || CategoryId != Guid.Empty)
-        {
-            var res = await ser.GetAllProductsByCategoryId(CategoryId.Value);
-            if (!string.IsNullOrEmpty(res.ErrorMessage))
 
-                NotificationService.Notify(new NotificationMessage
-                    {
-                        Severity = NotificationSeverity.Error,
-                        Summary = "خطأ",
-                        Detail = res.ErrorMessage,
-                        Duration = 4000,
-                    });
-            else
-                ProductLst = res.Data;
-        }
+        var res = await ser.GetAllProductsByCategoryId(CategoryId);
+        if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "خطأ",
+                    Detail = res.ErrorMessage,
+                    Duration = 4000,
+                });
+        else
+            ProductLst = res.Data;
     }
 
 
