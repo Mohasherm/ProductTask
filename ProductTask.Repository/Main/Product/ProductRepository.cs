@@ -23,7 +23,7 @@ namespace ProductTask.Repository.Main.Product
         {
             var res = new OperationResult<bool>();
 
-            if (string.IsNullOrEmpty(dto.Name) || string.IsNullOrEmpty(dto.Description) || dto.Price <= 0)
+            if (string.IsNullOrEmpty(dto.Name) || string.IsNullOrEmpty(dto.Description) || dto.Price <= 0 || dto.Categories == null || dto.Categories.Count == 0)
                 res.ThrowException(ErrorKey.SomeFieldesIsRequired, ResultStatus.ValidationError);
 
             if (dto.Categories != null && dto.Categories.Count > 0)
@@ -57,7 +57,7 @@ namespace ProductTask.Repository.Main.Product
         {
             var res = new OperationResult<bool>();
 
-            if (dto.Id == Guid.Empty || string.IsNullOrEmpty(dto.Name) || string.IsNullOrEmpty(dto.Description) || dto.Price <= 0)
+            if (dto.Id == Guid.Empty || string.IsNullOrEmpty(dto.Name) || string.IsNullOrEmpty(dto.Description) || dto.Price <= 0 || dto.Categories == null || dto.Categories.Count == 0)
                 res.ThrowException(ErrorKey.SomeFieldesIsRequired, ResultStatus.ValidationError);
 
             var data = await _get<ProductModel>(x => x.Id == dto.Id);
