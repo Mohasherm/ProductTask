@@ -1,0 +1,108 @@
+﻿@page "/Login"
+@using ProductTaskFrontEnd.Service.Account.Dto
+@inject IAccountService ser
+@inject NavigationManager nav
+@inject NotificationService NotificationService
+
+<PageTitle>تسجيل الدخول</PageTitle>
+
+<style>
+    .rz-growl-item {
+        position: fixed !important;
+        z-index: 1002 !important;
+        bottom: 10px !important;
+        float: right !important;
+    }
+</style>
+
+<RadzenRow Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10"
+           Style="width: 100%; max-width: 800px; overflow: hidden;">
+
+    <RadzenColumn Size="12">
+        <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12">
+            <RadzenText TextStyle="TextStyle.H1" TagName="TagName.H2" Class="rz-mb-12" Style="font-size:30px;font-family: 'Cairo-Medium', Fallback, sans-serif !important;">Login</RadzenText>
+            <RadzenTemplateForm Data="@model" Submit="@((LoginRequest args) => { Submit(args); })">
+                <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+                    <RadzenColumn Size="12" SizeMD="12">
+                        <RadzenStack>
+                            <DataAnnotationsValidator />
+
+                            <RadzenStack Gap="1rem">
+                                <RadzenRow AlignItems="Radzen.AlignItems.Center">
+                                    <RadzenColumn Size="12">
+                                        <RadzenLabel class="mylabel" Text="اسم المستخدم" Component="PhoneNumber" />
+                                    </RadzenColumn>
+                                </RadzenRow>
+                                <RadzenRow>
+                                    <RadzenColumn Size="12">
+                                        <RadzenTextBox Placeholder="اسم المستخدم" class="w-100 mytext" @bind-value="model.UserName" Name="UserName" />
+                                        <ValidationMessage For="() => model.UserName"></ValidationMessage>
+                                    </RadzenColumn>
+                                </RadzenRow>
+
+                                <RadzenRow AlignItems="Radzen.AlignItems.Center">
+                                    <RadzenColumn Size="12">
+                                        <RadzenLabel class="mylabel" Text="كلمة المرور" Component="Password" />
+                                    </RadzenColumn>
+                                </RadzenRow>
+                                <RadzenRow>
+                                    <RadzenColumn Size="12">
+                                        <RadzenPassword Placeholder="كلمة المرور" class="w-100 mytext" @bind-value="model.Password" Name="Password" />
+                                        <ValidationMessage For="() => model.Password"></ValidationMessage>
+                                    </RadzenColumn>
+                                </RadzenRow>
+
+                            </RadzenStack>
+
+                        </RadzenStack>
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem"
+                             Class="rz-mt-8 rz-mb-4">
+                    <RadzenButton ButtonType="Radzen.ButtonType.Submit" class="mybtn" Size="ButtonSize.Large" Text="Login" IsBusy=@busy />
+
+                </RadzenStack>
+            </RadzenTemplateForm>
+
+        </RadzenCard>
+    </RadzenColumn>
+
+
+</RadzenRow>
+
+@code {
+    LoginRequest model = new();
+
+    bool busy;
+
+    public async Task Submit(LoginRequest arg)
+    {
+        busy = true;
+        var res = await ser.Login(model);
+        if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "خطأ",
+                    Detail = res.ErrorMessage,
+                    Duration = 4000,
+                });
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "",
+                    Detail = "تم إتمام الطلب بنجاح",
+                    Duration = 4000,
+                });
+
+            nav.NavigateTo($"/");
+        }
+        busy = false;
+        StateHasChanged();
+    }
+}

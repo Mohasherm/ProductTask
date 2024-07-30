@@ -3,17 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTask", "ProductTask\ProductTask.csproj", "{A0B8D56E-BF9B-4041-9D07-FCDEE06D5A03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTask", "ProductTask\ProductTask.csproj", "{A0B8D56E-BF9B-4041-9D07-FCDEE06D5A03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTask.Base", "ProductTask.Base\ProductTask.Base.csproj", "{E9339402-2D3C-4AB1-97C1-3DC5165250B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTask.Base", "ProductTask.Base\ProductTask.Base.csproj", "{E9339402-2D3C-4AB1-97C1-3DC5165250B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTask.Repository", "ProductTask.Repository\ProductTask.Repository.csproj", "{FCE105EE-9CF3-4AC6-AC4E-1A17B3E2655F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTask.Repository", "ProductTask.Repository\ProductTask.Repository.csproj", "{FCE105EE-9CF3-4AC6-AC4E-1A17B3E2655F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTask.Entity", "ProductTask.Entity\ProductTask.Entity.csproj", "{4E7BE081-E3D3-4111-9CCD-000A785FEF53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTask.Entity", "ProductTask.Entity\ProductTask.Entity.csproj", "{4E7BE081-E3D3-4111-9CCD-000A785FEF53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTask.SqlServer", "ProductTask.SqlServer\ProductTask.SqlServer.csproj", "{0C04DC33-56D2-4AF4-BC29-734005F223DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTask.SqlServer", "ProductTask.SqlServer\ProductTask.SqlServer.csproj", "{0C04DC33-56D2-4AF4-BC29-734005F223DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTask.Shared", "ProductTask.Shared\ProductTask.Shared.csproj", "{D1642BC8-6E43-4872-BBAE-B760015298BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTask.Shared", "ProductTask.Shared\ProductTask.Shared.csproj", "{D1642BC8-6E43-4872-BBAE-B760015298BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{9357B1A7-651F-4942-B07E-2C5E27D58DA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTaskFrontEnd", "ProductTaskFrontEnd\ProductTaskFrontEnd.csproj", "{0F891E8A-6AF6-4974-82AE-B1E3CF38017D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +49,16 @@ Global
 		{D1642BC8-6E43-4872-BBAE-B760015298BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1642BC8-6E43-4872-BBAE-B760015298BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1642BC8-6E43-4872-BBAE-B760015298BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F891E8A-6AF6-4974-82AE-B1E3CF38017D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F891E8A-6AF6-4974-82AE-B1E3CF38017D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F891E8A-6AF6-4974-82AE-B1E3CF38017D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F891E8A-6AF6-4974-82AE-B1E3CF38017D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0F891E8A-6AF6-4974-82AE-B1E3CF38017D} = {9357B1A7-651F-4942-B07E-2C5E27D58DA0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F7608C6-787D-4456-A266-10D6891F7280}

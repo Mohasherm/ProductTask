@@ -1,0 +1,59 @@
+﻿@inherits LayoutComponentBase
+
+@inject IAccountService ser
+@inject NavigationManager nav
+
+
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Gap="0">
+            <div style="height: 60px;">
+                <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
+                <RadzenLabel style="margin-bottom: 15px;" Text="Product Task" />
+            </div>
+            <AuthorizeView>
+                <Authorized>
+                    <div style="margin-left:5px;height: 60px;">
+                        <RadzenMenu>
+                            <RadzenMenuItem Text="إدارة الحساب" Icon="account_circle" IconColor="@Colors.Info">
+                                <RadzenMenuItem class="fs-6" Text="تسجيل الخروج" Click="Logout" Icon="input">
+                                </RadzenMenuItem>
+                            </RadzenMenuItem>
+                        </RadzenMenu>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="@sidebarExpanded">
+        <RadzenPanelMenu>
+
+            <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Home" Icon="home" Path="/" />
+            <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Category" Icon="category" Path="/Categories" />
+            <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Products" Icon="extension" Path="/Services" />
+            <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Login" Icon="account_box" Path="/Login" />
+            <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Register" Icon="account_box" Path="/Register" />
+
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
+            @Body
+        </div>
+    </RadzenBody>
+    <RadzenComponents />
+</RadzenLayout>
+
+
+
+
+@code {
+    bool sidebarExpanded = true;
+
+    public async Task Logout()
+    {
+        await ser.Logout();
+        nav.NavigateTo("/login");
+    }
+
+}

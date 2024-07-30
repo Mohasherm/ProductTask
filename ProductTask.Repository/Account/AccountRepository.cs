@@ -62,20 +62,6 @@ namespace ProductTask.Repository.Account
             return res;
         }
 
-        public async Task<OperationResult<List<GetRolesDto>>> GetRoles()
-        {
-            var result = new OperationResult<List<GetRolesDto>>();
-
-            result.Data = await _context.Roles
-                .AsNoTracking()
-                .Select(x => new GetRolesDto
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }).ToListAsync();
-
-            return result;
-        }
 
         public async Task<OperationResult<GetAllUsersResponse>> GetUserById(Guid Id)
         {
