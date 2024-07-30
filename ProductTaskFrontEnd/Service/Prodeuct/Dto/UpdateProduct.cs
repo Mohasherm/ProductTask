@@ -11,5 +11,6 @@ public class UpdateProduct
     public string Description { get; set; }
     [Required(ErrorMessage = "هذا الحقل مطلوب")]
     public float Price { get; set; }
+    [Required(ErrorMessage = "هذا الحقل مطلوب")]
     public List<Guid> Categories { get; set; }
 }

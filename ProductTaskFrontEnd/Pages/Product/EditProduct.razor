@@ -1,5 +1,178 @@
-﻿<h3>EditProduct</h3>
+﻿@attribute [Authorize]
+@page "/EditProduct/{Id}"
+@using ProductTaskFrontEnd.Service.Category.Dto
+@using ProductTaskFrontEnd.Service.Prodeuct.Dto
+
+@inject IProductService ser
+@inject ICategoryService pser
+@inject NavigationManager nav
+
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+
+<PageTitle>Edit Product</PageTitle>
+
+<style>
+    .rz-growl-item {
+        position: fixed !important;
+        z-index: 1002 !important;
+        bottom: 10px !important;
+        float: right !important;
+    }
+</style>
+
+<RadzenTemplateForm Data="@model" Submit="@((UpdateProduct args) => { Submit(args); })">
+    <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+        <RadzenColumn Size="12" SizeMD="12">
+            <RadzenStack>
+                <RadzenFieldset Text="Edit Product">
+                    <DataAnnotationsValidator />
+
+                    <RadzenStack Gap="1rem">
+
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Name" Component="Name" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextBox Placeholder="Name" Style="display: block" class="w-100" @bind-Value="model.Name" Name="Name" />
+                                <ValidationMessage For="() => model.Name"></ValidationMessage>
+                            </RadzenColumn>
+                        </RadzenRow>
+
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Description" Component="Description" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextBox Placeholder="Description" Style="display: block" class="w-100" @bind-Value="model.Description" Name="Description" />
+                                <ValidationMessage For="() => model.Description"></ValidationMessage>
+                            </RadzenColumn>
+                        </RadzenRow>
+
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Price" Component="Price" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenNumeric Placeholder="Price" Style="display: block" class="w-100" @bind-Value="model.Price" Name="Price" />
+                                <ValidationMessage For="() => model.Price"></ValidationMessage>
+                            </RadzenColumn>
+                        </RadzenRow>
+
+                        @if (Categorieslst != null && Categorieslst.Count > 0)
+                        {
+                            <RadzenRow AlignItems="AlignItems.Center">
+                                <RadzenColumn Size="12" SizeMD="4">
+                                    <RadzenLabel Text="الخدمات" Component="services" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="8">
+                                    <RadzenDropDown @bind-Value="model.Categories" Data=@Categorieslst TextProperty="Name" ValueProperty="Id" Name="Categories"
+                                                    Multiple=true AllowClear=true Placeholder="Choose categories" Chips=true Style="display: block" class="w-100" />
+                                    <ValidationMessage For="() => model.Categories"></ValidationMessage>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        }
+
+
+                    </RadzenStack>
+
+                </RadzenFieldset>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem"
+                 Class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Icon="save" Text="حفظ" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Icon="cancel"
+                      Text="رجوع" Click="@((args) => DialogService.Close(true))" />
+    </RadzenStack>
+</RadzenTemplateForm>
+
+
 
 @code {
+    [Parameter] public Guid Id { get; set; }
 
+    UpdateProduct model = new();
+    bool busy;
+
+    List<GetCategoryDto> Categorieslst;
+    bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        var res = await pser.GetAllCategory();
+        if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "خطأ",
+                    Detail = res.ErrorMessage,
+                    Duration = 4000,
+                });
+        else
+            Categorieslst = res.Data;
+
+        loading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id != Guid.Empty || Id != null)
+        {
+            var res = await ser.GetProductById(Id);
+            if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "خطأ",
+                        Detail = res.ErrorMessage,
+                        Duration = 4000,
+                    });
+                nav.NavigateTo("/Products");
+            }
+            else
+            {
+                model = res.Data;
+            }
+        }
+    }
+
+
+    public async Task Submit(UpdateProduct arg)
+    {
+        busy = true;
+
+        var res = await ser.UpdateProduct(model);
+        if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "خطأ",
+                    Detail = res.ErrorMessage,
+                    Duration = 4000,
+                });
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "",
+                    Detail = "تم إتمام الطلب بنجاح",
+                    Duration = 4000,
+                });
+            DialogService.Close(true);
+        }
+        busy = false;
+        StateHasChanged();
+
+    }
 }

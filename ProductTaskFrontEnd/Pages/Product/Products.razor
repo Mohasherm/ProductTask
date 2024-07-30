@@ -1,6 +1,8 @@
 ﻿@page "/Products"
+@using ProductTaskFrontEnd.Service.Category.Dto
 @using ProductTaskFrontEnd.Service.Prodeuct.Dto
 
+@inject ICategoryService pser
 @inject IProductService ser
 @inject NotificationService NotificationService
 @inject DialogService DialogService
@@ -19,27 +21,41 @@
 
 <AuthorizeView>
     <Authorized>
-        <RadzenStack class="rz-mb-2" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem" Wrap="FlexWrap.Wrap">
+        <RadzenStack class="rz-mb-2" Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="1rem" Wrap="FlexWrap.Wrap">
             <RadzenButton Click=@AddNew Text="إضافة جديد" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+            @if (Categorieslst != null && Categorieslst.Count > 0)
+            {
+                <RadzenRow AlignItems="AlignItems.Center">
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenLabel Text="Categories" Component="Categories" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenDropDown @bind-Value="CategoryId" Data=@Categorieslst TextProperty="Name" ValueProperty="Id" Name="Categories" Change="GetProductsById"
+                                         Placeholder="Choose categories" Chips=true Style="display: block" class="w-100" />
+                    </RadzenColumn>
+                </RadzenRow>
+            }
         </RadzenStack>
     </Authorized>
 </AuthorizeView>
 
 
-<RadzenDataGrid Data="@Categorieslst" TItem="GetProductsDto" AllowVirtualization="true" Style="height:450px" AllowFiltering="true"
+<RadzenDataGrid Data="@ProductLst" TItem="GetProductsDto" AllowVirtualization="true" Style="height:450px" AllowFiltering="true"
                 AllowColumnResize="true" AllowAlternatingRows="false" PagerHorizontalAlign="HorizontalAlign.Center" ColumnWidth="100px"
                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or"
                 FilterMode="FilterMode.Simple" PageSize="10" AllowPaging="true" IsLoading=@loading
                 EmptyText="لا توجد بيانات" AllowSorting="true">
     <Columns>
-        @if (Categorieslst != null && Categorieslst.Count() > 0)
+        @if (ProductLst != null && ProductLst.Count() > 0)
         {
             <RadzenDataGridColumn TItem="GetProductsDto" Width="50px" Title="#" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
                 <Template Context="data">
-                    @(Categorieslst.IndexOf(data) + 1)
+                    @(ProductLst.IndexOf(data) + 1)
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="GetProductsDto" Property="Name" Title="Category" />
+            <RadzenDataGridColumn TItem="GetProductsDto" Property="Name" Title="Product" />
+            <RadzenDataGridColumn TItem="GetProductsDto" Property="Description" Title="Description" />
+            <RadzenDataGridColumn TItem="GetProductsDto" Property="Price" Title="Price" />
             <AuthorizeView>
                 <Authorized>
 
@@ -60,8 +76,10 @@
 </RadzenDataGrid>
 
 @code {
-    List<GetProductsDto> Categorieslst;
+    List<GetCategoryDto> Categorieslst;
+    List<GetProductsDto> ProductLst;
     bool loading;
+    Guid? CategoryId = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,10 +95,43 @@
                     Duration = 4000,
                 });
         else
-            Categorieslst = res.Data;
+            ProductLst = res.Data;
+
+        var result = await pser.GetAllCategory();
+        if (!string.IsNullOrEmpty(result.ErrorMessage))
+
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "خطأ",
+                    Detail = result.ErrorMessage,
+                    Duration = 4000,
+                });
+        else
+            Categorieslst = result.Data;
 
         loading = false;
     }
+
+    public async Task GetProductsById()
+    {
+        if (CategoryId != null || CategoryId != Guid.Empty)
+        {
+            var res = await ser.GetAllProductsByCategoryId(CategoryId.Value);
+            if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "خطأ",
+                        Detail = res.ErrorMessage,
+                        Duration = 4000,
+                    });
+            else
+                ProductLst = res.Data;
+        }
+    }
+
 
     public async Task AddNew()
     {
@@ -88,7 +139,7 @@
             new DialogOptions() { Width = "600px", Height = "350px", Resizable = true });
 
         var res = await ser.GetAllProducts();
-        Categorieslst = res.Data;
+        ProductLst = res.Data;
     }
 
     async Task Edit(Guid Id)
@@ -98,7 +149,7 @@
               new DialogOptions() { Width = "600px", Height = "350px", Resizable = true });
 
         var res = await ser.GetAllProducts();
-        Categorieslst = res.Data;
+        ProductLst = res.Data;
     }
 
 
@@ -131,7 +182,7 @@
                         Duration = 4000,
                     });
                 var res = await ser.GetAllProducts();
-                Categorieslst = res.Data;
+                ProductLst = res.Data;
             }
         }
     }
