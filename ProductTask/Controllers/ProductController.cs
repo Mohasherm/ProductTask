@@ -1,4 +1,5 @@
 ﻿using ButterflyApi.Base.ErrorHandling;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductTask.Repository.Main.Product;
 using ProductTask.Repository.Main.Product.Dto;
@@ -19,6 +20,7 @@ namespace ProductTask.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddProduct(AddProduct dto)
         {
             var res = await productRepository.AddProduct(dto);
@@ -26,6 +28,7 @@ namespace ProductTask.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateProduct(UpdateProduct dto)
         {
             var res = await productRepository.UpdateProduct(dto);
@@ -33,6 +36,7 @@ namespace ProductTask.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct(Guid Id)
         {
             var res = await productRepository.DeleteProduct(Id);
