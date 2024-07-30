@@ -53,7 +53,7 @@ namespace ProductTask.Repository.Main.Product
             return res;
         }
 
-        public async Task<OperationResult<bool>> UppdateProduct(UpdateProduct dto)
+        public async Task<OperationResult<bool>> UpdateProduct(UpdateProduct dto)
         {
             var res = new OperationResult<bool>();
 

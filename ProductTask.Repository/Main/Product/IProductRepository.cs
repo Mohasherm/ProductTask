@@ -9,7 +9,7 @@ namespace ProductTask.Repository.Main.Product
     public interface IProductRepository
     {
         Task<OperationResult<bool>> AddProduct(AddProduct dto);
-        Task<OperationResult<bool>> UppdateProduct(UpdateProduct dto);
+        Task<OperationResult<bool>> UpdateProduct(UpdateProduct dto);
         Task<OperationResult<bool>> DeleteProduct(Guid Id);
         Task<OperationResult<List<GetProductsDto>>> GetAllProducts();
         Task<OperationResult<List<GetProductsDto>>> GetAllProductsByCategoryId(Guid Id);

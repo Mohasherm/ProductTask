@@ -25,10 +25,10 @@ namespace ProductTask.Controllers
             return res.GetResult();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UppdateProduct(UpdateProduct dto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateProduct(UpdateProduct dto)
         {
-            var res = await productRepository.UppdateProduct(dto);
+            var res = await productRepository.UpdateProduct(dto);
             return res.GetResult();
         }
 
