@@ -7,6 +7,7 @@ using ProductTaskFrontEnd.Authentication;
 using ProductTaskFrontEnd.Interceptor;
 using ProductTaskFrontEnd.Service.Account;
 using ProductTaskFrontEnd.Service.Category;
+using ProductTaskFrontEnd.Service.Prodeuct;
 using ProductTaskFrontEnd.Service.Security;
 using Radzen;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
@@ -33,7 +34,7 @@ builder.Services.AddRadzenComponents();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 await builder.Build().RunAsync();

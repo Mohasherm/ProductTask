@@ -1,0 +1,138 @@
+﻿@page "/Products"
+@using ProductTaskFrontEnd.Service.Prodeuct.Dto
+
+@inject IProductService ser
+@inject NotificationService NotificationService
+@inject DialogService DialogService
+
+
+<PageTitle>التصنيفات</PageTitle>
+
+<style>
+    .rz-growl-item {
+        position: fixed !important;
+        z-index: 1002 !important;
+        bottom: 10px !important;
+        float: right !important;
+    }
+</style>
+
+<AuthorizeView>
+    <Authorized>
+        <RadzenStack class="rz-mb-2" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem" Wrap="FlexWrap.Wrap">
+            <RadzenButton Click=@AddNew Text="إضافة جديد" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+        </RadzenStack>
+    </Authorized>
+</AuthorizeView>
+
+
+<RadzenDataGrid Data="@Categorieslst" TItem="GetProductsDto" AllowVirtualization="true" Style="height:450px" AllowFiltering="true"
+                AllowColumnResize="true" AllowAlternatingRows="false" PagerHorizontalAlign="HorizontalAlign.Center" ColumnWidth="100px"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or"
+                FilterMode="FilterMode.Simple" PageSize="10" AllowPaging="true" IsLoading=@loading
+                EmptyText="لا توجد بيانات" AllowSorting="true">
+    <Columns>
+        @if (Categorieslst != null && Categorieslst.Count() > 0)
+        {
+            <RadzenDataGridColumn TItem="GetProductsDto" Width="50px" Title="#" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+                <Template Context="data">
+                    @(Categorieslst.IndexOf(data) + 1)
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="GetProductsDto" Property="Name" Title="Category" />
+            <AuthorizeView>
+                <Authorized>
+
+                    <RadzenDataGridColumn TItem="GetProductsDto" Property="Id" Title="" Filterable="false" Sortable="false" Frozen="true">
+                        <Template Context="data">
+                            <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Shade="Shade.Lighter" Icon="edit"
+                                          class="rz-border-radius-10 m-1" Click=@(() => Edit(data.Id)) />
+
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Variant="Variant.Flat" Shade="Shade.Lighter" Icon="delete"
+                                          IconColor="@Colors.Danger" class="rz-border-radius-10 m-1" Click=@(() => Delete(data.Id)) />
+
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Authorized>
+            </AuthorizeView>
+        }
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    List<GetProductsDto> Categorieslst;
+    bool loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        var res = await ser.GetAllProducts();
+        if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "خطأ",
+                    Detail = res.ErrorMessage,
+                    Duration = 4000,
+                });
+        else
+            Categorieslst = res.Data;
+
+        loading = false;
+    }
+
+    public async Task AddNew()
+    {
+        await DialogService.OpenAsync<AddProduct>("Product", null,
+            new DialogOptions() { Width = "600px", Height = "350px", Resizable = true });
+
+        var res = await ser.GetAllProducts();
+        Categorieslst = res.Data;
+    }
+
+    async Task Edit(Guid Id)
+    {
+        await DialogService.OpenAsync<EditProduct>("Product",
+              new Dictionary<string, object>() { { "Id", Id } },
+              new DialogOptions() { Width = "600px", Height = "350px", Resizable = true });
+
+        var res = await ser.GetAllProducts();
+        Categorieslst = res.Data;
+    }
+
+
+    async Task Delete(Guid Id)
+    {
+        var confirm = await DialogService.Confirm("هل أنت متأكد من الحذف", "حذف", new ConfirmOptions() { OkButtonText = "نعم", CancelButtonText = "لا" });
+
+        if (confirm == null)
+            return;
+
+        if (confirm.Value)
+        {
+            var result = await ser.DeleteProduct(Id);
+            if (!string.IsNullOrEmpty(result.ErrorMessage))
+
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "خطأ",
+                        Detail = result.ErrorMessage,
+                        Duration = 4000,
+                    });
+            else
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "",
+                        Detail = "تم الحذف بنجاح",
+                        Duration = 4000,
+                    });
+                var res = await ser.GetAllProducts();
+                Categorieslst = res.Data;
+            }
+        }
+    }
+}
