@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTask.Shared", "Produ
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{9357B1A7-651F-4942-B07E-2C5E27D58DA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTaskFrontEnd", "ProductTaskFrontEnd\ProductTaskFrontEnd.csproj", "{0F891E8A-6AF6-4974-82AE-B1E3CF38017D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTaskFrontEnd", "ProductTaskFrontEnd\ProductTaskFrontEnd.csproj", "{0F891E8A-6AF6-4974-82AE-B1E3CF38017D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

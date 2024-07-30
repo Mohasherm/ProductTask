@@ -1,0 +1,118 @@
+﻿@attribute [Authorize]
+@page "/EditCategory/{Id}"
+@using ProductTaskFrontEnd.Service.Category.Dto
+
+@inject ICategoryService ser
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@inject NavigationManager nav
+
+<PageTitle>تعديل التصنيف</PageTitle>
+
+<style>
+    .rz-growl-item {
+        position: fixed !important;
+        z-index: 1002 !important;
+        bottom: 10px !important;
+        float: right !important;
+    }
+</style>
+
+<RadzenTemplateForm Data="@model" Submit="@((UpdateCategoryDto args) => { Submit(args); })">
+    <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+        <RadzenColumn Size="12" SizeMD="12">
+            <RadzenStack>
+                <RadzenFieldset Text="تعديل التصنيف">
+                    <DataAnnotationsValidator />
+                    <RadzenStack Gap="1rem">
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="التصنيف" Component="Name" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextBox Placeholder="التصنيف" Style="display: block" class="w-100" @bind-Value="model.Name" Name="Name" />
+                                <ValidationMessage For="() => model.Name"></ValidationMessage>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenStack>
+                </RadzenFieldset>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem"
+                 Class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Icon="save" Text="حفظ" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Icon="cancel"
+                      Text="رجوع" Click="@((args) => DialogService.Close(true))" />
+    </RadzenStack>
+</RadzenTemplateForm>
+
+
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+
+    UpdateCategoryDto model = new();
+    bool busy;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id != Guid.Empty || Id != null)
+        {
+            var res = await ser.GetCategoryById(Id);
+            if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "خطأ",
+                        Detail = res.ErrorMessage,
+                        Duration = 4000,
+                    });
+                nav.NavigateTo("/Categories");
+            }
+            else
+            {
+                model = new()
+                    {
+                        Id = res.Data.Id,
+                        Name = res.Data.Name
+                    };
+            }
+        }
+    }
+
+
+    public async Task Submit(UpdateCategoryDto arg)
+    {
+        busy = true;
+
+        var res = await ser.UpdateCategory(model);
+        if (!string.IsNullOrEmpty(res.ErrorMessage))
+
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "خطأ",
+                    Detail = res.ErrorMessage,
+                    Duration = 4000,
+                });
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "",
+                    Detail = "تم إتمام الطلب بنجاح",
+                    Duration = 4000,
+                });
+            DialogService.Close(true);
+        }
+        busy = false;
+        StateHasChanged();
+
+    }
+}

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProductTask.Repository.Main.Product;
 using ProductTask.Repository.Main.Product.Dto;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProductTask.Controllers
@@ -21,6 +22,7 @@ namespace ProductTask.Controllers
 
         [HttpPost]
         [Authorize]
+        [Produces(typeof(bool))]
         public async Task<IActionResult> AddProduct(AddProduct dto)
         {
             var res = await productRepository.AddProduct(dto);
@@ -29,6 +31,7 @@ namespace ProductTask.Controllers
 
         [HttpPut]
         [Authorize]
+        [Produces(typeof(bool))]
         public async Task<IActionResult> UpdateProduct(UpdateProduct dto)
         {
             var res = await productRepository.UpdateProduct(dto);
@@ -37,6 +40,7 @@ namespace ProductTask.Controllers
 
         [HttpDelete]
         [Authorize]
+        [Produces(typeof(bool))]
         public async Task<IActionResult> DeleteProduct(Guid Id)
         {
             var res = await productRepository.DeleteProduct(Id);
@@ -44,6 +48,7 @@ namespace ProductTask.Controllers
         }
 
         [HttpGet]
+        [Produces(typeof(List<GetProductsDto>))]
         public async Task<IActionResult> GetAllProducts()
         {
             var res = await productRepository.GetAllProducts();
@@ -51,6 +56,7 @@ namespace ProductTask.Controllers
         }
 
         [HttpGet]
+        [Produces(typeof(List<GetProductsDto>))]
         public async Task<IActionResult> GetAllProductsByCategoryId(Guid Id)
         {
             var res = await productRepository.GetAllProductsByCategoryId(Id);
@@ -58,6 +64,7 @@ namespace ProductTask.Controllers
         }
 
         [HttpGet]
+        [Produces(typeof(GetProductsDto))]
         public async Task<IActionResult> GetProductById(Guid Id)
         {
             var res = await productRepository.GetProductById(Id);

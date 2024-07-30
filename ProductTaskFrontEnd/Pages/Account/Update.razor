@@ -1,11 +1,11 @@
-﻿@page "/Register"
+﻿@page "/Update"
 @using ProductTaskFrontEnd.Service.Account.Dto
 
 @inject IAccountService ser
 @inject NavigationManager nav
 @inject NotificationService NotificationService
 
-<PageTitle>Register</PageTitle>
+<PageTitle>Update Account Info</PageTitle>
 
 <style>
     .rz-growl-item {
@@ -21,8 +21,8 @@
 
     <RadzenColumn Size="12">
         <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-12">
-            <RadzenText TextStyle="TextStyle.H1" TagName="TagName.H2" Class="rz-mb-12" Style="font-size:30px;font-family: 'Cairo-Medium', Fallback, sans-serif !important;">Register</RadzenText>
-            <RadzenTemplateForm Data="@model" Submit="@((RegisterRequest args) => { Submit(args); })">
+            <RadzenText TextStyle="TextStyle.H1" TagName="TagName.H2" Class="rz-mb-12" Style="font-size:30px;font-family: 'Cairo-Medium', Fallback, sans-serif !important;">Update info</RadzenText>
+            <RadzenTemplateForm Data="@model" Submit="@((UpdateRequest args) => { Submit(args); })">
                 <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
                     <RadzenColumn Size="12" SizeMD="12">
                         <RadzenStack>
@@ -54,7 +54,7 @@
                                 </RadzenRow>
 
 
-                                   <RadzenRow AlignItems="Radzen.AlignItems.Center">
+                                <RadzenRow AlignItems="Radzen.AlignItems.Center">
                                     <RadzenColumn Size="12">
                                         <RadzenLabel class="mylabel" Text="رقم الجوال" Component="PhoneNumber" />
                                     </RadzenColumn>
@@ -67,7 +67,7 @@
                                 </RadzenRow>
 
 
-                                   <RadzenRow AlignItems="Radzen.AlignItems.Center">
+                                <RadzenRow AlignItems="Radzen.AlignItems.Center">
                                     <RadzenColumn Size="12">
                                         <RadzenLabel class="mylabel" Text="الايميل" Component="Email" />
                                     </RadzenColumn>
@@ -87,7 +87,7 @@
                 </RadzenRow>
                 <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem"
                              Class="rz-mt-8 rz-mb-4">
-                    <RadzenButton ButtonType="Radzen.ButtonType.Submit" class="mybtn" Size="ButtonSize.Large" Text="Register" IsBusy=@busy />
+                    <RadzenButton ButtonType="Radzen.ButtonType.Submit" class="mybtn" Size="ButtonSize.Large" Text="Update" IsBusy=@busy />
 
                 </RadzenStack>
             </RadzenTemplateForm>
@@ -99,14 +99,14 @@
 </RadzenRow>
 
 @code {
-    RegisterRequest model = new();
+    UpdateRequest model = new();
 
     bool busy;
 
-    public async Task Submit(RegisterRequest arg)
+    public async Task Submit(UpdateRequest arg)
     {
         busy = true;
-        var res = await ser.Register(model);
+        var res = await ser.Update(model);
         if (!string.IsNullOrEmpty(res.ErrorMessage))
 
         {

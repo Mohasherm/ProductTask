@@ -33,6 +33,11 @@
             <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Products" Icon="extension" Path="/Services" />
             <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Login" Icon="account_box" Path="/Login" />
             <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Register" Icon="account_box" Path="/Register" />
+            <AuthorizeView>
+                <Authorized>
+                    <RadzenPanelMenuItem style="font-size: 1.1rem;" Text="Update Account Info" Icon="account_box" Path="/Update" />
+                </Authorized>
+            </AuthorizeView>
 
         </RadzenPanelMenu>
     </RadzenSidebar>

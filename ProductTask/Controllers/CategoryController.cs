@@ -31,7 +31,7 @@ namespace ProductTask.Controllers
             return res.GetResult();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         [Produces(typeof(bool))]
         public async Task<IActionResult> UpdateCategory(UpdateCategoryDto dto)
@@ -51,7 +51,7 @@ namespace ProductTask.Controllers
 
         [HttpGet]
         [Produces(typeof(GetCategoryDto))]
-        public async Task<IActionResult> GetCategoryById(Guid Id)
+        public async Task<IActionResult> GetCategoryById([FromQuery] Guid Id)
         {
             var res = await icategoryRepository.GetCategoryById(Id);
             return res.GetResult();
@@ -60,7 +60,7 @@ namespace ProductTask.Controllers
         [HttpDelete]
         [Authorize]
         [Produces(typeof(bool))]
-        public async Task<IActionResult> DeleteCategory(Guid Id)
+        public async Task<IActionResult> DeleteCategory([FromQuery] Guid Id)
         {
             var res = await icategoryRepository.DeleteCategory(Id);
             return res.GetResult();
